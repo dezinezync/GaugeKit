@@ -26,6 +26,7 @@ extension GaugeView {
     self.maxValue = 100
     self.colors = colors
     self.additionalInfo = nil
+    self.labels = nil
   }
   
   /**
@@ -43,6 +44,7 @@ extension GaugeView {
     self.maxValue = 100
     self.colors = colors
     self.additionalInfo = nil
+    self.labels = nil
   }
   
   /**
@@ -62,6 +64,7 @@ extension GaugeView {
     self.maxValue = 100
     self.colors = colors
     self.additionalInfo = additionalInfo
+    self.labels = nil
   }
   
   /**
@@ -76,5 +79,6 @@ extension GaugeView {
     self.maxValue = 0
     self.colors = colors
     self.additionalInfo = nil
+    self.labels = nil
   }
 }

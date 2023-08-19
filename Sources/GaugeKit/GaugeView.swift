@@ -19,7 +19,7 @@ import SwiftUI
  - colors: The colors that should be used in the gradient that wipes across the gauge.
  - additionalInfo: A struct containing three (optional) strings to display when the user taps on the gauge.
  */
-public struct GaugeView : View {
+public struct GaugeView<Labels: View> : View {
   @State private var flipped: Bool = false
   
   let title: String?
@@ -27,6 +27,23 @@ public struct GaugeView : View {
   let maxValue: Int?
   let colors: [Color]
   let additionalInfo: GaugeAdditionalInfo?
+  let labels: (() -> Labels)?
+  
+  public init(
+    title: String? = nil,
+    value: Int? = nil,
+    maxValue: Int? = nil,
+    colors: [Color],
+    additionalInfo: GaugeAdditionalInfo? = nil,
+    labels: (() -> Labels)? = nil
+  ) {
+    self.title = title
+    self.value = value
+    self.maxValue = maxValue
+    self.colors = colors
+    self.additionalInfo = additionalInfo
+    self.labels = labels
+  }
   
   public init(
     title: String? = nil,
@@ -34,12 +51,13 @@ public struct GaugeView : View {
     maxValue: Int? = nil,
     colors: [Color],
     additionalInfo: GaugeAdditionalInfo? = nil
-  ) {
+  ) where Labels == EmptyView {
     self.title = title
     self.value = value
     self.maxValue = maxValue
     self.colors = colors
     self.additionalInfo = additionalInfo
+    self.labels = nil
   }
   
   public var body: some View {
@@ -49,7 +67,12 @@ public struct GaugeView : View {
       ZStack {
         ZStack {
           GaugeMeter(value: value, maxValue: maxValue, colors: colors)
-          GaugeLabelStack(value: value, title: title)
+          if let labels = labels?() {
+            labels
+          }
+          else {
+            GaugeLabelStack(value: value, title: title)
+          }
         }
         .rotation3DEffect(flipAngle, axis: (x: 0, y: 1, z: 0))
         .opacity(flipped ? 0.1 : 1)
